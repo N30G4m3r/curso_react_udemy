@@ -1,0 +1,14 @@
+# Dependencias (se aplica a cualquier subcarpeta que tenga node_modules)
+node_modules/
+
+# Compilados / Builds
+dist/
+build/
+
+# Variables de entorno
+.env
+*.local
+
+# Sistema operativo y editores
+.DS_Store
+.vscode/
