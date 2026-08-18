@@ -22,14 +22,15 @@ function App() {
       setCart([...cart, item])
     } else {
       const updatedCart = [...cart]
-      console.log(`Ya existe el item con el ID: ${item.id}, que tiene una cantidad ${}`)
+      console.log(`Ya existe el item con el ID: ${item.id}, que tiene una cantidad ${updatedCart[itemExists].quantity}`)
       updatedCart[itemExists].quantity++
+      setCart(updatedCart)
     }
   }
 
   return (
     <>
-      <Header />
+      <Header cart={cart} />
 
       <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
