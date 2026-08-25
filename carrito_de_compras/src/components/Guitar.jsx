@@ -1,7 +1,7 @@
 
 export default function Guitar({ guitar, addToCart }) {
 
-    const { id, name, image, description, price } = guitar
+    const { name, image, description, price } = guitar
 
     // console.log(`Guitar ID: ${id}, name: ${name}`)
 

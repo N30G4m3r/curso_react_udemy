@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-export default function Header({ cart }) {
+export default function Header({ cart, removeFromCart, increaseQuantity, decreaseQuantity, cleanCart }) {
     //State derived from props
     const isCartEmpty = useMemo(() => cart.length === 0, [cart]);
     // const totalItems = () => cart.reduce((total, item) => total + item.quantity, 0);
@@ -12,14 +12,14 @@ export default function Header({ cart }) {
                 <div className="row justify-content-center justify-content-md-between">
                     <div className="col-8 col-md-3">
                         <a href="index.html">
-                            <img className="img-fluid" src="./public/img/logo.svg" alt="imagen logo" />
+                            <img className="img-fluid" src="/img/logo.svg" alt="imagen logo" />
                         </a>
                     </div>
                     <nav className="col-md-6 a mt-5 d-flex align-items-start justify-content-end">
                         <div
                             className="carrito"
                         >
-                            <img className="img-fluid" src="./public/img/carrito.png" alt="imagen carrito" />
+                            <img className="img-fluid" src="/img/carrito.png" alt="imagen carrito" />
 
                             <div id="carrito" className="bg-white p-3">
                                 {isCartEmpty ? (
@@ -38,7 +38,7 @@ export default function Header({ cart }) {
                                             </thead>
                                             <tbody>
                                                 {cart.map((item) => (
-                                                    <tr>
+                                                    <tr key={item.id}>
                                                         <td>
                                                             <img className="img-fluid" src={`/img/${item.image}.jpg`} alt={`imagen guitarra ${item.name}`} />
                                                         </td>
@@ -50,6 +50,7 @@ export default function Header({ cart }) {
                                                             <button
                                                                 type="button"
                                                                 className="btn btn-dark"
+                                                                onClick={() => decreaseQuantity(item.id)}
                                                             >
                                                                 -
                                                             </button>
@@ -57,6 +58,7 @@ export default function Header({ cart }) {
                                                             <button
                                                                 type="button"
                                                                 className="btn btn-dark"
+                                                                onClick={() => increaseQuantity(item.id)}
                                                             >
                                                                 +
                                                             </button>
@@ -65,6 +67,7 @@ export default function Header({ cart }) {
                                                             <button
                                                                 className="btn btn-danger"
                                                                 type="button"
+                                                                onClick={() => removeFromCart(item.id)}
                                                             >
                                                                 X
                                                             </button>
@@ -76,7 +79,10 @@ export default function Header({ cart }) {
                                         <p className="text-end">Total pagar: <span className="fw-bold">${totalPrice.toFixed(2)}</span></p>
                                     </>
                                 )}
-                                <button className="btn btn-dark w-100 mt-3 p-2">Vaciar Carrito</button>
+                                <button
+                                    className="btn btn-dark w-100 mt-3 p-2"
+                                    onClick={cleanCart}
+                                >Vaciar Carrito</button>
                             </div>
                         </div>
                     </nav>
