@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { db } from "../data/db"
 
 const MAX_ITEM = 5;
@@ -67,6 +67,11 @@ export function useCart() {
         setCart([])
     }
 
+    //State derived from props
+    const isCartEmpty = useMemo(() => cart.length === 0, [cart]);
+    // const totalItems = () => cart.reduce((total, item) => total + item.quantity, 0);
+    const totalPrice = useMemo(() => cart.reduce((total, item) => total + (item.price * item.quantity), 0), [cart]);
+
     return {
         data,
         cart,
@@ -75,5 +80,7 @@ export function useCart() {
         increaseQuantity,
         decreaseQuantity,
         cleanCart,
+        isCartEmpty,
+        totalPrice,
     }
 }
