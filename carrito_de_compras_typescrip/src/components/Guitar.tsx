@@ -1,11 +1,17 @@
+import type { TGuitar } from "../types"
 
-export default function Guitar({ guitar, addToCart }) {
+interface GuitarProps {
+    guitar: TGuitar;
+    addToCart: (guitar: TGuitar) => void
+}
+
+export default function Guitar({ guitar, addToCart }: GuitarProps) {
 
     const { name, image, description, price } = guitar
 
     // console.log(`Guitar ID: ${id}, name: ${name}`)
 
-    const handleClick = (guitar) => {
+    const handleClick = (guitar: TGuitar) => {
         addToCart(guitar)
     }
 

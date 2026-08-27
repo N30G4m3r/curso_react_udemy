@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
 import { db } from "../data/db"
+import type { TCartItem, TGuitar, TGuitarID } from "../types";
 
 const MAX_ITEM = 5;
 const MIN_ITEM = 1;
@@ -7,7 +8,7 @@ const CART = 'cart'
 
 export function useCart() {
     // Initial State
-    const initialCart = () => {
+    const initialCart = (): TCartItem[] => {
         const localStorageCart = localStorage.getItem(CART)
         return localStorageCart ? JSON.parse(localStorageCart) : []
     }
@@ -20,28 +21,24 @@ export function useCart() {
     }, [cart])
 
     // Function
-    function addToCart(item) {
+    function addToCart(item: TGuitar) {
         const itemExists = cart.findIndex((value) => value.id === item.id)
-        console.log(`existe el item con el id (${item.id})?: ${itemExists}`)
-        console.log(`el item con el id (${item.id}) tiene: ${cart[itemExists]?.quantity}`)
         if (itemExists >= 0 && cart[itemExists].quantity >= MAX_ITEM) return;
         if (itemExists < 0) {
-            console.log(`Agregar al carrito el item con ID: ${item.id}`)
-            item.quantity = 1
-            setCart([...cart, item])
+            const newItem: TCartItem = { ...item, quantity : 1}
+            setCart([...cart, newItem])
         } else {
             const updatedCart = [...cart]
-            console.log(`Ya existe el item con el ID: ${item.id}, que tiene una cantidad ${updatedCart[itemExists].quantity}`)
             updatedCart[itemExists].quantity++
             setCart(updatedCart)
         }
     }
 
-    function removeFromCart(id) {
+    function removeFromCart(id: TGuitarID) {
         setCart(prevCart => prevCart.filter(guitar => guitar.id !== id))
     }
 
-    function increaseQuantity(id) {
+    function increaseQuantity(id: TGuitarID) {
         const updatedCart = cart.map(item => {
             if (item.id !== id || item.quantity >= MAX_ITEM) return item
             return {
@@ -52,7 +49,7 @@ export function useCart() {
         setCart(updatedCart)
     }
 
-    function decreaseQuantity(id) {
+    function decreaseQuantity(id: TGuitarID) {
         const updatedCart = cart.map(item => {
             if (item.id !== id || item.quantity <= MIN_ITEM) return item
             return {
