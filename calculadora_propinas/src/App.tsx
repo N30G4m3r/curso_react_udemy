@@ -1,120 +1,62 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useCallback } from "react"
+import MenuItem from "./components/MenuItem"
+import OrderContents from "./components/OrderContents"
+import OrderTotals from "./components/OrderTotals"
+import TipPorcentageForm from "./components/TipPorcentageForm"
+import { menuItems } from "./data/db"
+import useOrder from "./hooks/useOrder"
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { order, tip, setTipProcentage, addItemToOrder, removeItemFromOrder, placeOrder } = useOrder()
+
+  const orderView = useCallback(() => {
+    if (order.length <= 0) return (<p className="text-center">La orden esta vacía</p>)
+    return (
+      <>
+        <OrderContents
+          order={order}
+          removeItemFromOrder={removeItemFromOrder}
+        />
+
+        <TipPorcentageForm
+          setTipProcentage={setTipProcentage}
+        />
+
+        <OrderTotals
+          order={order}
+          tip={tip}
+          placeOrder={placeOrder}
+        />
+      </>
+    )
+  }, [order, tip, setTipProcentage, removeItemFromOrder, placeOrder])
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      <header className="bg-teal-400 py-5">
+        <h1 className="text-center text-4xl font-black">Calculadora de Propinas y Consumo</h1>
+      </header>
 
-      <div className="ticks"></div>
+      <main className="max-w-7xl mx-auto py-20 grid md:grid-cols-2">
+        <div className="p-5">
+          <h2 className="text-4xl font-black">Menu</h2>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+          <div className="space-y-3 mt-10">
+            {menuItems.map(item => (
+              <MenuItem
+                key={item.id}
+                item={item}
+                addItemToOrder={addItemToOrder}
+              />
+            ))}
+          </div>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+        <div className="border border-dashed border-slate-300 p-5 rounded-lg space-y-10">
+            {orderView()}
+        </div>
+      </main>
     </>
   )
 }
